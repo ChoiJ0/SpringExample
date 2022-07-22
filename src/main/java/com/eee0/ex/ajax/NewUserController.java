@@ -1,6 +1,8 @@
 package com.eee0.ex.ajax;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +35,7 @@ public class NewUserController {
 	
 	@PostMapping("/insert")
 	@ResponseBody
-	public String addUser(
+	public Map<String, String> addUser(
 			@RequestParam("name") String name
 			, @RequestParam("birthday") String birthday
 			, @RequestParam("introduce") String introduce
@@ -41,7 +43,19 @@ public class NewUserController {
 	
 		int count = newUserBO.addUser(name, birthday, introduce, email);
 		
-		return "삽입결과 : " + count;
+		Map<String, String> result = new HashMap<>();
+		
+		if(count == 1) {
+			//정상 상태
+			// {"result":"success"}
+			result.put("result", "success");
+		} else {
+			//문제 상태
+			// {"result":"fail"}
+			result.put("result", "faill");
+		}
+		
+		return result;
 	}
 	
 	@GetMapping("/input")
